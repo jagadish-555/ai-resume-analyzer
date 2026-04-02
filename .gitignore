@@ -1,0 +1,101 @@
+# ----------------------
+# OS FILES
+# ----------------------
+.DS_Store
+Thumbs.db
+
+# ----------------------
+# EDITOR / IDE
+# ----------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ----------------------
+# ENVIRONMENT VARIABLES
+# ----------------------
+.env
+.env.*
+*.env
+
+# ----------------------
+# PYTHON
+# ----------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Python build
+dist/
+build/
+*.egg-info/
+
+# ----------------------
+# NODE / JAVASCRIPT
+# ----------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build folders
+dist/
+build/
+
+# ----------------------
+# FRONTEND (React / Vite etc.)
+# ----------------------
+.cache/
+.next/
+.out/
+coverage/
+
+# ----------------------
+# LOG FILES
+# ----------------------
+*.log
+
+# ----------------------
+# DATABASE
+# ----------------------
+*.db
+*.sqlite
+
+# ----------------------
+# MACHINE LEARNING / DATA
+# ----------------------
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.model
+
+# Large datasets
+data/
+datasets/
+
+# ----------------------
+# SECRET FILES
+# ----------------------
+secrets.json
+credentials.json
+
+# ----------------------
+# MISC
+# ----------------------
+*.zip
+*.tar
+*.gz
+*.rar
