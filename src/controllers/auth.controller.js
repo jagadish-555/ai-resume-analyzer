@@ -1,51 +1,88 @@
-const userModel = require("../models/user.model"); 
+const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 async function registerUserController(req, res) {
-    const {username, email, password} = req.body;
+  const { username, email, password } = req.body;
 
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
-     }
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
 
-    const isUserExist = await userModel.findOne({ 
-        $or:[{ username }, { email }]
-     });
+  const isUserExist = await userModel.findOne({
+    $or: [{ username }, { email }],
+  });
 
-     if (isUserExist){
-        return res.status(400).json({ message: "User already exists with this username or email" });
-     };
+  if (isUserExist) {
+    return res
+      .status(400)
+      .json({ message: "User already exists with this username or email" });
+  }
 
-    const hash = await bcrypt.hash(password, 10);
+  const hash = await bcrypt.hash(password, 10);
 
-    const user = await userModel.create({
-        username,
-        email,
-        password: hash,
-     });
+  const user = await userModel.create({
+    username,
+    email,
+    password: hash,
+  });
 
-     const token = jwt.sign(
-        {id: user._id, username: user.username},
-        process.env.JWT_SECRET,
-        {expiresIn: "1d"}
-     )
+  const token = jwt.sign(
+    { id: user._id, username: user.username },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" },
+  );
 
-     res.cookie("token", token);
+  res.cookie("token", token);
 
-     res.status(201).json({
-        message: "User registered successfully",
-        user: {
-            id: user._id,
-            username: user.username,
-            email: user.email,
-        }
-     });
-
+  res.status(201).json({
+    message: "User registered successfully",
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  });
 }
 
+async function loginUserController(req, res) {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const user = await userModel.findOne({ email: email });
+
+  if (!user) {
+    return res.status(400).json({ message: "Invalid email or password" });
+  }
+
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatch) {
+    return res.status(400).json({ message: "Invalid email or password" });
+  }
+
+  const token = jwt.sign(
+    { id: user._id, username: user.username },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" },
+  );
+
+  res.cookie("token", token);
+
+  res.status(200).json({
+    message: "User logged in successfully",
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  })
+};
 
 module.exports = {
   registerUserController,
+  loginUserController,
 };
