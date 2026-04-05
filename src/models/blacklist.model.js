@@ -1,0 +1,15 @@
+const { type } = require('express/lib/response');
+const mongoose = require('mongoose');
+
+const blackListTokenSchema = new mongoose.Schema({
+    token:{
+        type:String,
+        required:[true, 'Token is required'],
+    }
+},{
+    timestamps:true
+});
+
+const tokenBlacklistModel = mongoose.model('TokenBlacklist', blackListTokenSchema);
+
+module.exports = tokenBlacklistModel;
