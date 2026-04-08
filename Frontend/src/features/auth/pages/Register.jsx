@@ -1,13 +1,22 @@
-import React from "react";
+import React,{useState} from "react";
+import { useAuth } from "../hooks/useAuth";
 import {useNavigate, Link} from "react-router";
 
 const Register = () => {
 
     const navigate = useNavigate();
+    const {loading, handleRegister} = useAuth();
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        await handleRegister({username, email, password});
+        navigate("/");
     };
+
+    const [username, setusername] = React.useState("");
+    const [email, setemail] = React.useState("");
+    const [password, setpassword] = React.useState("");
     
 
     return (
@@ -17,15 +26,21 @@ const Register = () => {
                 <form onSubmit={handleSubmit} >
                     <div className="input-group">
                         <label htmlFor="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Enter username" />
+                        <input 
+                        onChange={(e)=>{setusername(e.target.value)}}
+                        type="text" id="username" name="username" placeholder="Enter username" />
                     </div>
                     <div className="input-group">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter email address" />
+                        <input 
+                        onChange={(e)=>{setemail(e.target.value)}}
+                        type="email" id="email" name="email" placeholder="Enter email address" />
                     </div>
                     <div className="input-group">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter password" />
+                        <input 
+                        onChange={(e)=>{setpassword(e.target.value)}}
+                        type="password" id="password" name="password" placeholder="Enter password" />
                     </div>
                     
                     <button className="button primary-button">Register</button>
