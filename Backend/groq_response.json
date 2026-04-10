@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-6f24f622-1c2b-44c5-8034-7c80f9e74185",
+  "object": "chat.completion",
+  "created": 1775710474,
+  "model": "openai/gpt-oss-120b",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "An **interview** is a structured conversation in which one person (or a group) asks questions and another person (or group) provides answers. The purpose is to gather information, assess suitability, explore ideas, or tell a story.  \n\n### Core Elements\n| Element | Description |\n|--------|--------------|\n| **Interviewer(s)** | The person(s) who pose questions, guide the flow, and often evaluate the responses. |\n| **Interviewee(s)** | The person(s) who answer, share knowledge, experiences, or opinions. |\n| **Questions & Answers** | The exchange of prompts and responses that drives the conversation. |\n| **Goal** | To obtain specific information, evaluate qualifications, uncover insights, or create content. |\n| **Setting** | Can be in‑person, over the phone, video‑call, or even written (e‑mail/online questionnaire). |\n\n### Common Types of Interviews\n\n| Type | Typical Context | Main Objective |\n|------|----------------|----------------|\n| **Job/Employment interview** | Hiring process | Determine if a candidate’s skills, experience, and fit match the role and organization. |\n| **Journalistic interview** | News, magazines, podcasts | Elicit quotes, stories, or expert commentary for a public audience. |\n| **Research interview** | Academic or market research | Collect qualitative data on attitudes, behaviors, or experiences. |\n| **Performance interview** | Auditions, casting | Evaluate talent, skill, or artistic suitability. |\n| **Exit interview** | Employee leaving a company | Gather feedback on workplace culture, reasons for departure, and improvement ideas. |\n| **Informational interview** | Career exploration | Learn about a field, role, or company from someone with experience. |\n| **Screening interview** | Initial hiring stage | Quickly filter candidates based on basic qualifications. |\n| **Panel interview** | Hiring, academic admissions | Multiple interviewers assess a single interviewee simultaneously. |\n| **Technical interview** | Engineering, IT, data science | Test problem‑solving, coding, or domain‑specific knowledge. |\n\n### Typical Structure\n\n1. **Preparation** – Define objectives, draft questions, research the interviewee, and arrange logistics.  \n2. **Introduction** – Build rapport, explain the purpose, and set expectations (e.g., time, confidentiality).  \n3. **Questioning** – Ask open‑ended, behavioral, or situational questions; follow up for depth.  \n4. **Listening & Probing** – Actively listen, note key points, and ask clarifying or deeper questions.  \n5. **Closing** – Summarize key takeaways, allow final remarks, and explain next steps (e.g., next interview round, publication timeline).  \n6. **Post‑Interview** – Review notes, assess responses against criteria, and document findings.\n\n### Best Practices\n\n- **Be purposeful:** Each question should serve the interview’s goal.  \n- **Stay neutral:** Avoid leading or biased questions that could skew answers.  \n- **Listen actively:** Show genuine interest; let the interviewee speak freely before interrupting.  \n- **Adapt:** Follow the conversation’s flow; be ready to explore unexpected but relevant topics.  \n- **Maintain professionalism:** Respect time, confidentiality, and cultural sensitivities.  \n\nIn essence, an interview is a tool for knowledge exchange—whether you’re hiring talent, gathering news, conducting research, or learning from someone’s experience. The quality of the outcome depends largely on how well the interview is planned, executed, and analyzed.",
+        "reasoning": "The user asks: \"What is an interview?\" They want a definition. Provide a clear explanation. Possibly cover types: job interview, journalistic, research, etc. Keep answer concise but thorough."
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "queue_time": 0.122656691,
+    "prompt_tokens": 76,
+    "prompt_time": 0.003997846,
+    "completion_tokens": 774,
+    "completion_time": 1.6302833190000001,
+    "total_tokens": 850,
+    "total_time": 1.634281165,
+    "completion_tokens_details": {
+      "reasoning_tokens": 41
+    }
+  },
+  "usage_breakdown": null,
+  "system_fingerprint": "fp_8a618bed98",
+  "x_groq": {
+    "id": "req_01knr9f2pef27rm9030tcd24a1",
+    "seed": 1792173578
+  },
+  "service_tier": "on_demand"
+}
