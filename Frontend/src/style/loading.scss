@@ -1,0 +1,33 @@
+@use "../style/variables" as *;
+
+.loading-screen {
+    min-height: 100vh;
+    width: 100%;
+    background-color: $color-surface;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    h1 {
+        font-size: $font-size-base;
+        font-weight: 500;
+        color: $color-text-muted;
+    }
+}
+
+.loading-spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 2px solid $color-primary-tint;
+    border-top-color: $color-primary;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

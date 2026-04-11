@@ -1,0 +1,42 @@
+@use "../style/variables" as *;
+
+.not-found-page {
+    min-height: 100vh;
+    width: 100%;
+    background-color: $color-surface;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-page;
+}
+
+.not-found-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.not-found-code {
+    font-size: 72px;
+    font-weight: 700;
+    color: $color-primary;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.not-found-page h1 {
+    font-size: $font-size-xl;
+    font-weight: 600;
+    color: $color-text;
+    line-height: 1.2;
+}
+
+.not-found-message {
+    font-size: $font-size-base;
+    color: $color-text-muted;
+    max-width: 360px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
