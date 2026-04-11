@@ -100,6 +100,7 @@ const interviewQuestionSchema = z.object({
     .describe(
       "A day-wise preparation plan for the candidate based on the analysis of the resume and job description"
     ),
+    title: z.string().describe("The title of the job position for which interview report is generated")
 });
 
 
