@@ -1,18 +1,38 @@
-.button{
-    border: none;
+@use "./variables" as *;
+
+.button {
+    border: 0.5px solid transparent;
     outline: none;
-    padding-inline: 1.5rem;
-    padding-block: 0.75rem;
-    border-radius: 1rem;
+    padding: 10px 16px;
+    border-radius: $radius-sm;
     cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    font-size: $font-size-base;
+    font-weight: 500;
+    line-height: 1.4;
 
-    transition: all 0.3s ease-in-out;
-
-    &.primary-button{
-        background-color: #e1034d;
-        color: white;
+    &:focus-visible {
+        box-shadow: 0 0 0 3px $color-primary-tint;
     }
-    &.active{
-        transform:scale(1.1);
+
+    &.primary-button {
+        background-color: $color-primary;
+        color: $color-white;
+        border-color: $color-primary;
+
+        &:hover {
+            background-color: $color-primary-dark;
+            border-color: $color-primary-dark;
+        }
+    }
+
+    &.ghost-button {
+        background-color: transparent;
+        color: $color-text;
+        border-color: $color-border;
+
+        &:hover {
+            border-color: $color-border-hover;
+        }
     }
 }
