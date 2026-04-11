@@ -1,4 +1,4 @@
-const { type } = require('express/lib/response');
+
 const mongoose = require('mongoose');
 
 const interviewReportSchema = new mongoose.Schema({
@@ -20,7 +20,11 @@ const interviewReportSchema = new mongoose.Schema({
     technicalQuestionsSchema: [technicalQuestionsSchema],
     behavioralQuestionsSchema: [behavioralQuestionsSchema],
     skillGapsSchema: [skillGapsSchema],
-    preperationPlanSchema: [preperationPlanSchema]
+    preperationPlanSchema: [preperationPlanSchema],
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
+    }
 
 },{
     timestamps: true
