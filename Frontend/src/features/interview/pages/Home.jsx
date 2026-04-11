@@ -2,11 +2,13 @@ import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
+import { useAuth } from '../../auth/hooks/useAuth'
 import LoadingScreen from '../../../components/LoadingScreen'
 
 const Home = () => {
 
     const { loading, generateReport, reports, error } = useInterview()
+    const { handleLogout } = useAuth()
     const [jobDescription, setJobDescription] = useState("")
     const [selfDescription, setSelfDescription] = useState("")
     const [localError, setLocalError] = useState("")
@@ -96,13 +98,25 @@ const Home = () => {
                     <span className='brand__dot' aria-hidden='true'></span>
                     <span className='brand__text'>PrepAI</span>
                 </Link>
-                <button
-                    className='button ghost-button home-nav__reports-btn'
-                    type='button'
-                    onClick={() => reportsRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                    My reports
-                </button>
+                <div className='home-nav__actions'>
+                    <button
+                        className='button ghost-button'
+                        type='button'
+                        onClick={() => reportsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        My reports
+                    </button>
+                    <button
+                        className='button ghost-button'
+                        type='button'
+                        onClick={async () => {
+                            const result = await handleLogout()
+                            if (result.success) navigate('/login')
+                        }}
+                    >
+                        Logout
+                    </button>
+                </div>
             </nav>
 
             <section className='home-content'>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styles from '../style/interview.module.scss';
 import { useInterview } from '../hooks/useInterview.js';
+import { useAuth } from '../../auth/hooks/useAuth';
 import LoadingScreen from '../../../components/LoadingScreen';
 import Sidebar from '../components/Sidebar';
 import HeroSection from '../components/HeroSection';
@@ -13,6 +14,7 @@ import { downloadFeedbackPdf } from '../utils/downloadFeedbackPdf';
 
 const Interview = () => {
     const { report, loading } = useInterview();
+    const { handleLogout } = useAuth();
     const [activeSection, setActiveSection] = useState('overview');
     const mainRef = useRef(null);
     const sectionRefs = useRef({});
@@ -117,6 +119,10 @@ const Interview = () => {
                 <div className={styles.navActions}>
                     <button type='button' className={styles.ghostButton} onClick={() => navigate('/')}>My reports</button>
                     <button type='button' className={styles.primaryButton} onClick={handleDownloadPdf}>Download PDF</button>
+                    <button type='button' className={styles.ghostButton} onClick={async () => {
+                        const result = await handleLogout();
+                        if (result.success) navigate('/login');
+                    }}>Logout</button>
                 </div>
             </header>
 
