@@ -1,21 +1,23 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
+import { Link, useNavigate } from 'react-router'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
-import { useNavigate } from 'react-router'
+import LoadingScreen from '../../../components/LoadingScreen'
 
 const Home = () => {
 
     const { loading, generateReport, reports, error } = useInterview()
-    const [ jobDescription, setJobDescription ] = useState("")
-    const [ selfDescription, setSelfDescription ] = useState("")
-    const [ localError, setLocalError ] = useState("")
-    const [ resumeInfo, setResumeInfo ] = useState(null)
+    const [jobDescription, setJobDescription] = useState("")
+    const [selfDescription, setSelfDescription] = useState("")
+    const [localError, setLocalError] = useState("")
+    const [resumeInfo, setResumeInfo] = useState(null)
     const resumeInputRef = useRef()
+    const reportsRef = useRef()
 
     const navigate = useNavigate()
 
     const handleResumeChange = (e) => {
-        const file = e.target.files?.[ 0 ]
+        const file = e.target.files?.[0]
 
         if (!file) {
             setResumeInfo(null)
@@ -50,7 +52,7 @@ const Home = () => {
 
         const trimmedJobDescription = jobDescription.trim()
         const trimmedSelfDescription = selfDescription.trim()
-        const resumeFile = resumeInputRef.current.files[ 0 ]
+        const resumeFile = resumeInputRef.current.files[0]
 
         if (!trimmedJobDescription) {
             setLocalError("Job description is required.")
@@ -72,26 +74,32 @@ const Home = () => {
         }
     }
 
+    const handleReportClick = (reportId) => {
+        navigate(`/interview/${reportId}`)
+    }
+
+    const handleReportKeyDown = (e, reportId) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            navigate(`/interview/${reportId}`)
+        }
+    }
+
     if (loading) {
-        return (
-            <main className='loading-screen'>
-                <div className='loading-spinner' aria-hidden='true'></div>
-                <h1>Generating your report...</h1>
-            </main>
-        )
+        return <LoadingScreen message='Generating your report...' />
     }
 
     return (
         <div className='home-page'>
             <nav className='home-nav'>
-                <div className='brand'>
+                <Link to='/' className='brand'>
                     <span className='brand__dot' aria-hidden='true'></span>
                     <span className='brand__text'>PrepAI</span>
-                </div>
+                </Link>
                 <button
                     className='button ghost-button home-nav__reports-btn'
                     type='button'
-                    onClick={() => document.getElementById('recent-reports')?.scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() => reportsRef.current?.scrollIntoView({ behavior: 'smooth' })}
                 >
                     My reports
                 </button>
@@ -104,8 +112,14 @@ const Home = () => {
                 </header>
 
                 {(localError || error) && (
-                    <div className='error-box'>
-                        {localError || error}
+                    <div className='error-box' role='alert'>
+                        <span>{localError || error}</span>
+                        <button
+                            type='button'
+                            className='error-box__dismiss'
+                            aria-label='Dismiss error'
+                            onClick={() => setLocalError("")}
+                        >×</button>
                     </div>
                 )}
 
@@ -139,9 +153,9 @@ const Home = () => {
                                     </span>
                                     <p className='dropzone__title'>{resumeInfo ? 'Resume selected' : 'Drop file here'}</p>
                                     <p className='dropzone__subtitle'>PDF only (Max 3MB)</p>
-                                    <input ref={resumeInputRef} onChange={handleResumeChange} hidden type='file' id='resume' name='resume' accept='.pdf' />
+                                    <input ref={resumeInputRef} onChange={handleResumeChange} hidden type='file' id='resume' name='resume' accept='.pdf' aria-label='Upload resume PDF' />
                                 </label>
-                                <p className={`upload-status ${resumeInfo ? 'upload-status--ok' : ''}`}>
+                                <p className={`upload-status ${resumeInfo ? 'upload-status--ok' : ''}`} aria-live='polite'>
                                     {resumeInfo ? `Uploaded: ${resumeInfo.name} (${resumeInfo.sizeKB} KB)` : 'No resume uploaded yet'}
                                 </p>
                             </div>
@@ -167,18 +181,26 @@ const Home = () => {
                             onClick={handleGenerateReport}
                             className='button primary-button generate-btn'
                             type='button'
+                            disabled={loading}
                         >
                             Generate report
                         </button>
                     </div>
                 </div>
 
-                {reports.length > 0 && (
-                    <section className='recent-reports' id='recent-reports'>
-                        <h2>My reports</h2>
+                <section className='recent-reports' ref={reportsRef}>
+                    <h2>My reports</h2>
+                    {reports.length > 0 ? (
                         <ul className='reports-list'>
                             {reports.map(report => (
-                                <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
+                                <li
+                                    key={report._id}
+                                    className='report-item'
+                                    role='button'
+                                    tabIndex={0}
+                                    onClick={() => handleReportClick(report._id)}
+                                    onKeyDown={(e) => handleReportKeyDown(e, report._id)}
+                                >
                                     <h3>{report.title || 'Untitled position'}</h3>
                                     <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
                                     <p className={`match-score ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>
@@ -187,8 +209,13 @@ const Home = () => {
                                 </li>
                             ))}
                         </ul>
-                    </section>
-                )}
+                    ) : (
+                        <div className='empty-state'>
+                            <p className='empty-state__icon' aria-hidden='true'>📋</p>
+                            <p className='empty-state__text'>No reports yet. Generate your first analysis above to get started!</p>
+                        </div>
+                    )}
+                </section>
             </section>
         </div>
     )

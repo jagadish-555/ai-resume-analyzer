@@ -108,6 +108,25 @@
     background-color: $severity-high-bg;
     color: $severity-high-text;
     font-size: $font-size-sm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    &__dismiss {
+        background: none;
+        border: none;
+        color: $severity-high-text;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+        opacity: 0.6;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 }
 
 .interview-card {
@@ -338,9 +357,15 @@
     flex-direction: column;
     gap: 4px;
     cursor: pointer;
+    outline: none;
 
     &:hover {
         border-color: $color-border-hover;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $color-primary-tint;
+        border-color: $color-primary;
     }
 
     h3 {
@@ -372,6 +397,28 @@
     }
 }
 
+.empty-state {
+    border: 0.5px dashed $color-border;
+    border-radius: $radius-md;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+
+    &__icon {
+        font-size: 32px;
+        line-height: 1;
+    }
+
+    &__text {
+        font-size: $font-size-base;
+        color: $color-text-muted;
+        max-width: 320px;
+    }
+}
+
 @media (max-width: 980px) {
     .interview-card {
         &__body {
@@ -380,6 +427,7 @@
     }
 
     .panel {
+
         &--left,
         &--right {
             min-height: auto;
@@ -392,6 +440,7 @@
 }
 
 @media (max-width: 640px) {
+
     .home-nav,
     .home-content {
         padding-left: 16px;
@@ -405,6 +454,7 @@
     }
 
     .interview-card {
+
         &__body,
         &__footer {
             padding: 16px;
