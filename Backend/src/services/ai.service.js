@@ -40,6 +40,8 @@ const interviewQuestionSchema = z.object({
           ),
       })
     )
+    .min(10)
+    .max(15)
     .describe(
       "List of technical questions that could be asked in the interview"
     ),
@@ -61,6 +63,8 @@ const interviewQuestionSchema = z.object({
           ),
       })
     )
+    .min(10)
+    .max(15)
     .describe(
       "List of behavioral questions that could be asked in the interview"
     ),
@@ -165,11 +169,14 @@ The JSON must follow this EXACT structure — every field must match the types s
 Rules:
 - title must be a non-empty STRING representing the role/job title from the provided job description
 - matchScore must be a NUMBER between 0 and 100
+- interviewQuestions must contain BETWEEN 10 AND 15 objects
+- behavioralQuestions must contain BETWEEN 10 AND 15 objects
 - interviewQuestions, behavioralQuestions: each item MUST be an object with "question", "intention", "answer" string fields
 - skillGaps: each item MUST be an object with "skill" (string) and "severity" (one of: "low", "medium", "high")
 - preparationPlan: each item MUST be an object with "day" (number), "focus" (string), "tasks" (array of strings)
 - Do NOT put strings directly in arrays — always use objects as shown above
 - severity must be exactly one of: "low", "medium", "high" — nothing else
+- The structure shown above is only a shape example. You must still generate 10-15 items for both interviewQuestions and behavioralQuestions.
 
 Now generate the report for the candidate above.`;
 
