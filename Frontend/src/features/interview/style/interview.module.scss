@@ -234,6 +234,17 @@ $radius-sm: 8px;
     margin-bottom: 16px;
 }
 
+.analysisGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.analysisCard {
+    margin-bottom: 0;
+}
+
 .heroCard {
     display: flex;
     align-items: flex-start;
@@ -678,6 +689,10 @@ $radius-sm: 8px;
     .heroStats {
         width: 100%;
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .analysisGrid {
+        grid-template-columns: 1fr;
     }
 }
 
