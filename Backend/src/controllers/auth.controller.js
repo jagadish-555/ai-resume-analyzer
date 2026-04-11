@@ -106,9 +106,60 @@ async function getMeController(req, res) {
   })
 }
 
+async function getSessionController(req, res) {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(200).json({
+      message: "No active session",
+      authenticated: false,
+      user: null,
+    });
+  }
+
+  const isTokenBlacklisted = await tokenBlacklistModel.findOne({ token });
+  if (isTokenBlacklisted) {
+    return res.status(200).json({
+      message: "Session expired",
+      authenticated: false,
+      user: null,
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findById(decoded.id);
+
+    if (!user) {
+      return res.status(200).json({
+        message: "Session user not found",
+        authenticated: false,
+        user: null,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Session active",
+      authenticated: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    return res.status(200).json({
+      message: "Invalid session",
+      authenticated: false,
+      user: null,
+    });
+  }
+}
+
 module.exports = {
   registerUserController,
   loginUserController,
   logoutUserController,
-  getMeController
+  getMeController,
+  getSessionController
 };

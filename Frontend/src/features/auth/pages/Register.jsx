@@ -6,23 +6,30 @@ const Register = () => {
 
     const navigate = useNavigate();
     const {loading, handleRegister} = useAuth();
+    const [username, setusername] = React.useState("");
+    const [email, setemail] = React.useState("");
+    const [password, setpassword] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleRegister({username, email, password});
-        navigate("/");
-    };
+        setErrorMessage("")
+        const result = await handleRegister({username, email, password});
+        if (result.success) {
+            navigate("/");
+            return
+        }
 
-    const [username, setusername] = React.useState("");
-    const [email, setemail] = React.useState("");
-    const [password, setpassword] = React.useState("");
+        setErrorMessage(result.message)
+    };
     
 
     return (
         <main>
             <div className="form-container">
                 <h1>Register</h1>
+                {errorMessage && <p style={{ color: "#b91c1c" }}>{errorMessage}</p>}
                 <form onSubmit={handleSubmit} >
                     <div className="input-group">
                         <label htmlFor="username">Username</label>

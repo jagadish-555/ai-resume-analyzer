@@ -12,7 +12,7 @@ export async function register({username, email, password}) {
         });
         return response.data;
     } catch (err) {
-        console.log(err);
+        throw err;
     }
 }
 
@@ -24,7 +24,7 @@ export async function login({email, password}){
         });
         return response.data;
     }catch(err){
-        console.log(err);
+        throw err;
     }
 }
 
@@ -34,7 +34,7 @@ export async function logout(){
         return response.data;
         }
     catch(err){
-        console.log(err);
+        throw err;
     }
 }
 
@@ -43,6 +43,22 @@ export async function getMe(){
         const response = await api.get('/get-me');
         return response.data;
     }catch(err){
-        console.log(err);
+        if (err?.response?.status === 401) {
+            return null;
+        }
+        throw err;
+    }
+}
+
+export async function getSession(){
+    try {
+        const response = await api.get('/session');
+        return response.data;
+    } catch (err) {
+        if (err?.response?.status === 401) {
+            return { authenticated: false, user: null };
+        }
+
+        throw err;
     }
 }

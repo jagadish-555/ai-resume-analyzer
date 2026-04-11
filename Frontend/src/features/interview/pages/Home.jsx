@@ -5,17 +5,71 @@ import { useNavigate } from 'react-router'
 
 const Home = () => {
 
-    const { loading, generateReport,reports } = useInterview()
+    const { loading, generateReport, reports, error } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
+    const [ localError, setLocalError ] = useState("")
+    const [ resumeInfo, setResumeInfo ] = useState(null)
     const resumeInputRef = useRef()
 
     const navigate = useNavigate()
 
+    const handleResumeChange = (e) => {
+        const file = e.target.files?.[ 0 ]
+
+        if (!file) {
+            setResumeInfo(null)
+            return
+        }
+
+        const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+        if (!isPdf) {
+            setLocalError("Only PDF resumes are supported.")
+            setResumeInfo(null)
+            e.target.value = ""
+            return
+        }
+
+        const maxFileSize = 3 * 1024 * 1024
+        if (file.size > maxFileSize) {
+            setLocalError("Resume file must be less than 3MB.")
+            setResumeInfo(null)
+            e.target.value = ""
+            return
+        }
+
+        setLocalError("")
+        setResumeInfo({
+            name: file.name,
+            sizeKB: Math.max(1, Math.round(file.size / 1024))
+        })
+    }
+
     const handleGenerateReport = async () => {
+        setLocalError("")
+
+        const trimmedJobDescription = jobDescription.trim()
+        const trimmedSelfDescription = selfDescription.trim()
         const resumeFile = resumeInputRef.current.files[ 0 ]
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile })
-        navigate(`/interview/${data._id}`)
+
+        if (!trimmedJobDescription) {
+            setLocalError("Job description is required.")
+            return
+        }
+
+        if (!resumeFile && !trimmedSelfDescription) {
+            setLocalError("Provide either a resume file or self description.")
+            return
+        }
+
+        const data = await generateReport({
+            jobDescription: trimmedJobDescription,
+            selfDescription: trimmedSelfDescription,
+            resumeFile
+        })
+        if (data?._id) {
+            navigate(`/interview/${data._id}`)
+        }
     }
 
     if (loading) {
@@ -39,6 +93,19 @@ const Home = () => {
             <div className='interview-card'>
                 <div className='interview-card__body'>
 
+                    {(localError || error) && (
+                        <div style={{
+                            marginBottom: "1rem",
+                            padding: "0.75rem 1rem",
+                            border: "1px solid #f87171",
+                            borderRadius: "0.5rem",
+                            backgroundColor: "#fee2e2",
+                            color: "#991b1b"
+                        }}>
+                            {localError || error}
+                        </div>
+                    )}
+
                     {/* Left Panel - Job Description */}
                     <div className='panel panel--left'>
                         <div className='panel__header'>
@@ -50,11 +117,12 @@ const Home = () => {
                         </div>
                         <textarea
                             onChange={(e) => { setJobDescription(e.target.value) }}
+                            value={jobDescription}
                             className='panel__textarea'
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
                             maxLength={5000}
                         />
-                        <div className='char-counter'>0 / 5000 chars</div>
+                        <div className='char-counter'>{jobDescription.length} / 5000 chars</div>
                     </div>
 
                     {/* Vertical Divider */}
@@ -75,14 +143,17 @@ const Home = () => {
                                 Upload Resume
                                 <span className='badge badge--best'>Best Results</span>
                             </label>
-                            <label className='dropzone' htmlFor='resume'>
+                            <label className={`dropzone ${resumeInfo ? 'dropzone--uploaded' : ''}`} htmlFor='resume'>
                                 <span className='dropzone__icon'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
                                 </span>
-                                <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
-                                <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                <p className='dropzone__title'>{resumeInfo ? 'Resume selected' : 'Click to upload or drag & drop'}</p>
+                                <p className='dropzone__subtitle'>PDF only (Max 3MB)</p>
+                                <input ref={resumeInputRef} onChange={handleResumeChange} hidden type='file' id='resume' name='resume' accept='.pdf' />
                             </label>
+                            <p className={`upload-status ${resumeInfo ? 'upload-status--ok' : ''}`}>
+                                {resumeInfo ? `Uploaded: ${resumeInfo.name} (${resumeInfo.sizeKB} KB)` : 'No resume uploaded yet'}
+                            </p>
                         </div>
 
                         {/* OR Divider */}
@@ -93,6 +164,7 @@ const Home = () => {
                             <label className='section-label' htmlFor='selfDescription'>Quick Self-Description</label>
                             <textarea
                                 onChange={(e) => { setSelfDescription(e.target.value) }}
+                                value={selfDescription}
                                 id='selfDescription'
                                 name='selfDescription'
                                 className='panel__textarea panel__textarea--short'
