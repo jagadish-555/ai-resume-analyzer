@@ -4,6 +4,7 @@ import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useAuth } from '../../auth/hooks/useAuth'
 import LoadingScreen from '../../../components/LoadingScreen'
+import Logo from '../../../components/Logo'
 
 const Home = () => {
 
@@ -94,10 +95,7 @@ const Home = () => {
     return (
         <div className='home-page'>
             <nav className='home-nav'>
-                <Link to='/' className='brand'>
-                    <span className='brand__dot' aria-hidden='true'></span>
-                    <span className='brand__text'>PrepAI</span>
-                </Link>
+                <Logo />
                 <div className='home-nav__actions'>
                     <button
                         className='button ghost-button'

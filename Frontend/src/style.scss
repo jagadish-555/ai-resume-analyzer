@@ -1,6 +1,20 @@
 @use "./style/variables" as *;
 @use "./style/button.scss";
 
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+
+  &__text {
+    font-size: 16px;
+    font-weight: 700;
+    color: $color-text;
+    letter-spacing: -0.01em;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;

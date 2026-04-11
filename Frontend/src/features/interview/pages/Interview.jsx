@@ -4,6 +4,7 @@ import styles from '../style/interview.module.scss';
 import { useInterview } from '../hooks/useInterview.js';
 import { useAuth } from '../../auth/hooks/useAuth';
 import LoadingScreen from '../../../components/LoadingScreen';
+import Logo from '../../../components/Logo';
 import Sidebar from '../components/Sidebar';
 import HeroSection from '../components/HeroSection';
 import MatchBreakdown from '../components/MatchBreakdown';
@@ -112,10 +113,7 @@ const Interview = () => {
     return (
         <div className={styles.page}>
             <header className={styles.navbar}>
-                <div className={styles.logo} role='button' tabIndex={0} onClick={() => navigate('/')} onKeyDown={(e) => e.key === 'Enter' && navigate('/')}>
-                    <span className={styles.logoDot} aria-hidden='true'></span>
-                    <span className={styles.logoText}>PrepAI</span>
-                </div>
+                <Logo />
                 <div className={styles.navActions}>
                     <button type='button' className={styles.ghostButton} onClick={() => navigate('/')}>My reports</button>
                     <button type='button' className={styles.primaryButton} onClick={handleDownloadPdf}>Download PDF</button>

@@ -1,0 +1,30 @@
+import { Link } from 'react-router';
+
+const LogoMark = ({ size = 24, className = '' }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size}
+        height={size}
+        viewBox="0 0 32 32"
+        fill="none"
+        className={className}
+        aria-hidden="true"
+    >
+        <rect width="32" height="32" rx="8" fill="#534AB7" />
+        <path d="M10 8h6a5 5 0 0 1 0 10h-2v6h-4V8z" fill="#fff" />
+        <circle cx="22" cy="22" r="3.5" fill="#A99BF5" />
+        <circle cx="22" cy="22" r="1.5" fill="#fff" />
+    </svg>
+);
+
+const Logo = ({ to = '/', size = 24, showText = true }) => {
+    return (
+        <Link to={to} className="logo-link" aria-label="PrepAI home">
+            <LogoMark size={size} />
+            {showText && <span className="logo-link__text">PrepAI</span>}
+        </Link>
+    );
+};
+
+export { LogoMark };
+export default Logo;
