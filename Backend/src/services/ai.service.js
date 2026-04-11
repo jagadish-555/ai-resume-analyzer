@@ -1,7 +1,7 @@
 const { Groq } = require("groq-sdk");
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
-const fs = require("fs");
+
 
 
 
@@ -103,7 +103,7 @@ const interviewQuestionSchema = z.object({
 });
 
 
-async function generateInterviewQuestions(resume, selfDescription, jobDescription) {
+async function generateInterviewReport(resume, selfDescription, jobDescription) {
   const schema = zodToJsonSchema(interviewQuestionSchema);
 
 const prompt = `You are analyzing a job candidate. Here is their information:
@@ -240,4 +240,4 @@ Now generate the report for the candidate above.`;
   return result.data;
 }
 
-module.exports = generateInterviewQuestions;
+module.exports = { generateInterviewReport }

@@ -1,38 +1,9 @@
 
 const mongoose = require('mongoose');
 
-const interviewReportSchema = new mongoose.Schema({
-    jobDescription: {
-        type: String,
-        required: [ true, 'Job description is required']
-    },
-    resume:{
-        type: String,
-    },
-    selfDescription:{
-        type: String,
-    },
-    matchScore:{
-        type: Number,
-        min:0,
-        max:100
-    },
-    technicalQuestionsSchema: [technicalQuestionsSchema],
-    behavioralQuestionsSchema: [behavioralQuestionsSchema],
-    skillGapsSchema: [skillGapsSchema],
-    preperationPlanSchema: [preperationPlanSchema],
-    user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users'
-    }
-
-},{
-    timestamps: true
-});
-
 const technicalQuestionsSchema = new mongoose.Schema({
     question:{
-        string: String,
+        type: String,
         required: [true, 'Question is required']
     },
     intention:{
@@ -49,7 +20,7 @@ const technicalQuestionsSchema = new mongoose.Schema({
 
 const behavioralQuestionsSchema = new mongoose.Schema({
     question:{
-        string: String,
+        type: String,
         required: [true, 'Question is required']
     },
     intention:{
@@ -71,14 +42,14 @@ const skillGapsSchema = new mongoose.Schema({
     },
     severity:{
         type: String,
-        enum: ['Low', 'Medium', 'High'],
+        enum: ['low', 'medium', 'high'],
         required: [true, 'Severity is required']
     }
 },{
     _id: false
 });
 
-const preperationPlanSchema = new mongoose.Schema({
+const preparationPlanSchema = new mongoose.Schema({
     day:{
         type:Number,
         required: [true, 'Day is required']
@@ -92,6 +63,37 @@ const preperationPlanSchema = new mongoose.Schema({
         required: [true, 'Task is required']
 
     }]
+},{
+    _id: false
+});
+
+const interviewReportSchema = new mongoose.Schema({
+    jobDescription: {
+        type: String,
+        required: [ true, 'Job description is required']
+    },
+    resume:{
+        type: String,
+    },
+    selfDescription:{
+        type: String,
+    },
+    matchScore:{
+        type: Number,
+        min:0,
+        max:100
+    },
+    interviewQuestions: [technicalQuestionsSchema],
+    behavioralQuestions: [behavioralQuestionsSchema],
+    skillGaps: [skillGapsSchema],
+    preparationPlan: [preparationPlanSchema],
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
+    }
+
+},{
+    timestamps: true
 });
 
 
