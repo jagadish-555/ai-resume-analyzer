@@ -12,7 +12,7 @@
     line-height: 1.4;
 
     &:focus-visible {
-        box-shadow: 0 0 0 3px $color-primary-tint;
+        outline: 3px solid $color-primary-tint;
     }
 
     &.primary-button {
