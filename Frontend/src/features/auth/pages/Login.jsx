@@ -19,7 +19,7 @@ const Login = () => {
         setSubmitting(true)
         const result = await handleLogin({ email, password });
         if (result.success) {
-            navigate("/");
+            navigate("/home");
             return
         }
 

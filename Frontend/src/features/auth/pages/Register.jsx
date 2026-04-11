@@ -21,7 +21,7 @@ const Register = () => {
         setSubmitting(true)
         const result = await handleRegister({ username, email, password });
         if (result.success) {
-            navigate("/");
+            navigate("/home");
             return
         }
 

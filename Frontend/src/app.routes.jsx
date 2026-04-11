@@ -5,6 +5,7 @@ import LoadingScreen from "./components/LoadingScreen";
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 const Protected = lazy(() => import("./features/auth/components/Protected"));
+const Landing = lazy(() => import("./pages/Landing"));
 const Home = lazy(() => import("./features/interview/pages/Home"));
 const Interview = lazy(() => import("./features/interview/pages/Interview"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -17,6 +18,10 @@ const withSuspense = (element) => (
 
 export const router = createBrowserRouter([
     {
+        path: "/",
+        element: withSuspense(<Landing />)
+    },
+    {
         path: "/login",
         element: withSuspense(<Login />)
     },
@@ -25,7 +30,7 @@ export const router = createBrowserRouter([
         element: withSuspense(<Register />)
     },
     {
-        path: "/",
+        path: "/home",
         element: withSuspense(<Protected><Home /></Protected>)
     },
     {
