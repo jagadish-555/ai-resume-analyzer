@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import "./auth.form.scss";
 import { useAuth } from "../hooks/useAuth";
@@ -7,11 +7,17 @@ import { LogoMark } from "../../../components/Logo";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { loading, handleLogin } = useAuth();
+    const { loading, user, handleLogin } = useAuth();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [submitting, setSubmitting] = useState(false)
+
+    useEffect(() => {
+        if (!loading && user) {
+            navigate("/home", { replace: true })
+        }
+    }, [loading, user, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,6 +35,10 @@ const Login = () => {
 
     if (loading) {
         return <LoadingScreen message="Loading..." />
+    }
+
+    if (user) {
+        return null
     }
 
     return (

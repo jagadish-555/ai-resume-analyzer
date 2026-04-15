@@ -1,5 +1,5 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById } from "../services/interview.api"
-import { useContext, useEffect } from "react"
+import { useCallback, useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
 
@@ -15,6 +15,7 @@ export const useInterview = () => {
 
     const { loading, setLoading, report, setReport, reports, setReports, error, setError } = context
     const getErrorMessage = (error, fallbackMessage) => error?.response?.data?.message || error?.message || fallbackMessage
+    const isValidObjectId = (id) => /^[a-f\d]{24}$/i.test(id)
 
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
         const normalizedJobDescription = (jobDescription || "").trim()
@@ -50,7 +51,8 @@ export const useInterview = () => {
         return response?.interviewReport || null
     }
 
-    const getReportById = async (interviewId) => {
+    const getReportById = useCallback(async (interviewId) => {
+        setReport(null)
         setLoading(true)
         setError(null)
         let response = null
@@ -64,9 +66,9 @@ export const useInterview = () => {
             setLoading(false)
         }
         return response?.interviewReport || null
-    }
+    }, [setError, setLoading, setReport])
 
-    const getReports = async () => {
+    const getReports = useCallback(async () => {
         setLoading(true)
         setError(null)
         let response = null
@@ -81,7 +83,7 @@ export const useInterview = () => {
         }
 
         return response?.interviewReports || []
-    }
+    }, [setError, setLoading, setReports])
 
     const getResumePdf = async (interviewReportId) => {
         const targetReport =
@@ -106,15 +108,19 @@ export const useInterview = () => {
         window.URL.revokeObjectURL(url)
     }
 
-
-
     useEffect(() => {
         if (interviewId) {
+            if (!isValidObjectId(interviewId)) {
+                setReport(null)
+                setError("Invalid report ID.")
+                setLoading(false)
+                return
+            }
             getReportById(interviewId)
         } else {
             getReports()
         }
-    }, [ interviewId ])
+    }, [interviewId, getReportById, getReports, setError, setLoading, setReport])
 
     return { loading, report, reports, error, generateReport, getReportById, getReports, getResumePdf }
 

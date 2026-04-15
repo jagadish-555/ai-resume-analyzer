@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router";
 import "./auth.form.scss";
@@ -8,12 +8,18 @@ import { LogoMark } from "../../../components/Logo";
 const Register = () => {
 
     const navigate = useNavigate();
-    const { loading, handleRegister } = useAuth();
+    const { loading, user, handleRegister } = useAuth();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [submitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (!loading && user) {
+            navigate("/home", { replace: true })
+        }
+    }, [loading, user, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,6 +37,10 @@ const Register = () => {
 
     if (loading) {
         return <LoadingScreen message="Loading..." />
+    }
+
+    if (user) {
+        return null
     }
 
     return (

@@ -14,7 +14,7 @@ import PrepPlan from '../components/PrepPlan';
 import { downloadFeedbackPdf } from '../utils/downloadFeedbackPdf';
 
 const Interview = () => {
-    const { report, loading } = useInterview();
+    const { report, loading, error } = useInterview();
     const { handleLogout } = useAuth();
     const [activeSection, setActiveSection] = useState('overview');
     const mainRef = useRef(null);
@@ -106,8 +106,58 @@ const Interview = () => {
         });
     };
 
-    if (loading || !report) {
+    if (loading) {
         return <LoadingScreen message='Loading your report...' />;
+    }
+
+    if (error) {
+        return (
+            <div className={styles.page}>
+                <header className={styles.navbar}>
+                    <Logo />
+                    <div className={styles.navActions}>
+                        <button type='button' className={styles.ghostButton} onClick={() => navigate('/home')}>My reports</button>
+                    </div>
+                </header>
+                <main className={styles.main}>
+                    <HeroSection
+                        title='Unable to load this report'
+                        createdDate='--'
+                        matchScore={0}
+                        technicalCount={0}
+                        behavioralCount={0}
+                        gapCount={0}
+                    />
+                    <section className={styles.card}>
+                        <p>{error}</p>
+                        <button type='button' className={styles.primaryButton} onClick={() => navigate('/home')}>
+                            Back to my reports
+                        </button>
+                    </section>
+                </main>
+            </div>
+        );
+    }
+
+    if (!report) {
+        return (
+            <div className={styles.page}>
+                <header className={styles.navbar}>
+                    <Logo />
+                    <div className={styles.navActions}>
+                        <button type='button' className={styles.ghostButton} onClick={() => navigate('/home')}>My reports</button>
+                    </div>
+                </header>
+                <main className={styles.main}>
+                    <section className={styles.card}>
+                        <p>Report not found.</p>
+                        <button type='button' className={styles.primaryButton} onClick={() => navigate('/home')}>
+                            Back to my reports
+                        </button>
+                    </section>
+                </main>
+            </div>
+        );
     }
 
     return (
@@ -115,7 +165,7 @@ const Interview = () => {
             <header className={styles.navbar}>
                 <Logo />
                 <div className={styles.navActions}>
-                    <button type='button' className={styles.ghostButton} onClick={() => navigate('/')}>My reports</button>
+                    <button type='button' className={styles.ghostButton} onClick={() => navigate('/home')}>My reports</button>
                     <button type='button' className={styles.primaryButton} onClick={handleDownloadPdf}>Download PDF</button>
                     <button type='button' className={styles.ghostButton} onClick={async () => {
                         const result = await handleLogout();
