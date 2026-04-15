@@ -6,15 +6,22 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+function normalizeOrigin(value = '') {
+    return value.trim().replace(/\/$/, '');
+}
+
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
     .split(',')
-    .map(origin => origin.trim());
+    .map(origin => normalizeOrigin(origin))
+    .filter(Boolean);
 
 app.use(cors({
     origin: function (origin, callback) {
 
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
+        const normalizedRequestOrigin = normalizeOrigin(origin);
+
+        if (allowedOrigins.includes(normalizedRequestOrigin)) {
             return callback(null, true);
         }
         return callback(new Error('Not allowed by CORS'));

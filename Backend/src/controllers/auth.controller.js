@@ -3,20 +3,53 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const tokenBlacklistModel = require("../models/blacklist.model");
 
-const isProd = process.env.NODE_ENV === "production";
+function shouldUseSecureCookies() {
+  const explicitCookieSecure = process.env.COOKIE_SECURE;
+
+  if (explicitCookieSecure === "true") {
+    return true;
+  }
+
+  if (explicitCookieSecure === "false") {
+    return false;
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    return true;
+  }
+
+  const configuredOrigins = (process.env.CORS_ORIGIN || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  // If a real HTTPS frontend origin is configured, prefer secure cookies.
+  const hasHttpsNonLocalOrigin = configuredOrigins.some((origin) => {
+    return (
+      origin.startsWith("https://") &&
+      !origin.includes("localhost") &&
+      !origin.includes("127.0.0.1")
+    );
+  });
+
+  return hasHttpsNonLocalOrigin;
+}
+
+const shouldUseSecureCookie = shouldUseSecureCookies();
+const cookieSameSite = shouldUseSecureCookie ? "none" : "lax";
 
 const authCookieOptions = {
   httpOnly: true,
-  secure: isProd,
-  sameSite: isProd ? "none" : "lax",
+  secure: shouldUseSecureCookie,
+  sameSite: cookieSameSite,
   maxAge: 24 * 60 * 60 * 1000,
   path: "/",
 };
 
 const clearAuthCookieOptions = {
   httpOnly: true,
-  secure: isProd,
-  sameSite: isProd ? "none" : "lax",
+  secure: shouldUseSecureCookie,
+  sameSite: cookieSameSite,
   path: "/",
 };
 
