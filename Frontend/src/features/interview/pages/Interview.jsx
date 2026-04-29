@@ -99,6 +99,7 @@ const Interview = () => {
             title,
             createdDate,
             matchScore,
+            breakdown,
             technicalQuestions,
             behavioralQuestions,
             skillGaps,
